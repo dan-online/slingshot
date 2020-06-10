@@ -1,8 +1,5 @@
 import { serve, debug, ServerRequest } from "../deps.ts";
 import { Response } from "./utils/response.ts";
-// for await (const req of s) {
-//   req.respond({ body: "Hello World\n" });
-// }
 
 /**
  * The Slingshot core
@@ -16,7 +13,7 @@ import { Response } from "./utils/response.ts";
 class Slingshot {
   app: any;
   log: { info: Function; route: Function; req: Function };
-  paths: Array<{ method: string; path: string; cb: Function }>;
+  paths: Array<{ method: string; path: string; cb: Function }> = [];
   constructor(config = { port: 8080 }) {
     this.app = serve(config);
     this.log = {
@@ -25,12 +22,12 @@ class Slingshot {
       req: debug("slingshot:req"),
     };
     this.log.info("server started");
-    this.paths = [];
     this.listen();
     return this;
   }
   private async listen() {
     for await (const req of this.app) {
+      if (this.app.closing) return;
       this.handleRequest(req);
     }
   }
@@ -58,7 +55,7 @@ class Slingshot {
     handler.cb(req, res);
   }
   /**
-   *
+   * Get request handler
    * @param path - string of path
    * @param cb - callback of request
    * ```js
@@ -72,6 +69,16 @@ class Slingshot {
       path,
       cb,
     });
+  }
+  /**
+   * Close the server
+   * ```js
+   * Slingshot.close();
+   * ```
+   */
+  close() {
+    this.app.close();
+    return this;
   }
 }
 

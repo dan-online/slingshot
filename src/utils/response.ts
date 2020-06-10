@@ -2,20 +2,15 @@ import { ServerRequest } from "../../deps.ts";
 
 class Response {
   req: ServerRequest;
-  finished: boolean;
-  statusCode: number;
+  finished: boolean = false;
+  statusCode: number = 200;
   startTimestamp: number;
-  endTimestamp: number;
-  speed: number;
-  private finishCb: Function[];
+  endTimestamp: number = 0;
+  speed: number = 0;
+  private finishCb: Function[] = [];
   constructor(request: ServerRequest) {
     this.req = request;
-    this.finished = false;
-    this.statusCode = 200;
-    this.finishCb = [];
-    this.speed = 0;
     this.startTimestamp = new Date().getTime();
-    this.endTimestamp = 0;
     return this;
   }
   private clean() {
