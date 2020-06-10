@@ -4,3 +4,9 @@
 *bak
 .history
 .temp/**
+
+# Deno Lint
+node_modules/
+yarn.lock
+package.json
+.vscode

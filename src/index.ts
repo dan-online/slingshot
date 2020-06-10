@@ -15,11 +15,15 @@ import { Response } from "./utils/response.ts";
  */
 class Slingshot {
   app: any;
-  log: { info: any };
+  log: { info: Function; route: Function; req: Function };
   paths: Array<{ method: string; path: string; cb: Function }>;
   constructor(config = { port: 8080 }) {
     this.app = serve(config);
-    this.log = { info: debug("slingshot:info") };
+    this.log = {
+      info: debug("slingshot:inf"),
+      route: debug("slingshot:art"),
+      req: debug("slingshot:req"),
+    };
     this.log.info("server started");
     this.paths = [];
     this.listen();
@@ -31,16 +35,30 @@ class Slingshot {
     }
   }
   private handleRequest(req: ServerRequest) {
-    const handler = this.paths.find((x) =>
-      x.method.toLowerCase() == req.method.toLowerCase() && x.path == req.url
+    const handler = this.paths.find(
+      (x) =>
+        x.method.toLowerCase() == req.method.toLowerCase() && x.path == req.url
     );
     if (!handler) {
       return req.respond({ status: 404 });
     }
-    return handler.cb(req, new Response(req));
+    const res = new Response(req);
+    res.onfinish((finishRes: Response) => {
+      this.log.req(
+        req.method +
+          " " +
+          req.url +
+          " " +
+          finishRes.statusCode +
+          " " +
+          finishRes.speed +
+          "ms"
+      );
+    });
+    handler.cb(req, res);
   }
   /**
-   * 
+   *
    * @param path - string of path
    * @param cb - callback of request
    * ```js
@@ -48,6 +66,7 @@ class Slingshot {
    * ```
    */
   get(path: string, cb: Function) {
+    this.log.route("added " + path + " route");
     this.paths.push({
       method: "get",
       path,
