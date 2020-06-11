@@ -1,21 +1,28 @@
-# 🦕 deno-module-starter
+# Slingshot (WIP)
 
-[Deno](https://deno.land) module starter repository.
+A module created for [Deno](https://deno.land)
 
 ## Usage
 
 ```typescript
-import { getHelloWorld } from "https://raw.githubusercontent.com/BrunnerLivio/deno-module-starter/{VERSION}/mod.ts";
+import { Slingshot } from "https://raw.githubusercontent.com/dan-online/slingshot/mod.ts";
 
-const helloWorld = getHelloWorld();
-console.log(helloWorld); // Prints "Hello World" in bold
+const app = new Slingshot();
+
+app.get("/promise").then((req, res) => {
+  res.status(200).json({ date: new Date() });
+});
+
+app.get("/callback", (req, res) => {
+  res.status(200).json({ date: new Date() });
+});
 ```
 
 ## Test
 
 ```bash
 # unit tests
-deno ./test.ts
+deno test -A
 ```
 
 ## Format code

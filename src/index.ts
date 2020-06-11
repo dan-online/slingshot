@@ -34,7 +34,8 @@ class Slingshot {
   private handleRequest(req: ServerRequest) {
     const handler = this.paths.find(
       (x) =>
-        x.method.toLowerCase() == req.method.toLowerCase() && x.path == req.url
+        x.method.toLowerCase() == req.method.toLowerCase() &&
+        x.path == req.url,
     );
     if (!handler) {
       return req.respond({ status: 404 });
@@ -49,7 +50,7 @@ class Slingshot {
           finishRes.statusCode +
           " " +
           finishRes.speed +
-          "ms"
+          "ms",
       );
     });
     handler.cb(req, res);
