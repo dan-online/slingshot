@@ -1,6 +1,16 @@
 import { serve, debug, ServerRequest } from "../deps.ts";
 import { Response } from "./utils/response.ts";
 
+import { PromiseRequests } from "./handlers/promise.ts";
+import { CallbackRequests } from "./handlers/callback.ts";
+
+const log = {
+  info: debug("slingshot:info"),
+  route: debug("slingshot:rout"),
+  req: debug("slingshot:reqs"),
+  warn: debug("slingshot:warn"),
+};
+
 /**
  * The Slingshot core
  * @constructor
@@ -12,15 +22,14 @@ import { Response } from "./utils/response.ts";
  */
 class Slingshot {
   app: any;
-  log: { info: Function; route: Function; req: Function };
-  paths: Array<{ method: string; path: string; cb: Function }> = [];
+  log: { info: Function; route: Function; req: Function; warn: Function } = log;
+  paths: any = { get: {} };
+  promises: PromiseRequests;
+  callbacks: CallbackRequests;
   constructor(config = { port: 8080 }) {
     this.app = serve(config);
-    this.log = {
-      info: debug("slingshot:inf"),
-      route: debug("slingshot:art"),
-      req: debug("slingshot:req"),
-    };
+    this.promises = new PromiseRequests(this);
+    this.callbacks = new CallbackRequests(this);
     this.log.info("server started");
     this.listen();
     return this;
@@ -32,11 +41,7 @@ class Slingshot {
     }
   }
   private handleRequest(req: ServerRequest) {
-    const handler = this.paths.find(
-      (x) =>
-        x.method.toLowerCase() == req.method.toLowerCase() &&
-        x.path == req.url,
-    );
+    const handler = this.paths[req.method.toLowerCase()][req.url];
     if (!handler) {
       return req.respond({ status: 404 });
     }
@@ -50,26 +55,10 @@ class Slingshot {
           finishRes.statusCode +
           " " +
           finishRes.speed +
-          "ms",
+          "ms"
       );
     });
-    handler.cb(req, res);
-  }
-  /**
-   * Get request handler
-   * @param path - string of path
-   * @param cb - callback of request
-   * ```js
-   * Slingshot.get("/test", (request, response) => response.send("Hi"));
-   * ```
-   */
-  get(path: string, cb: Function) {
-    this.log.route("added " + path + " route");
-    this.paths.push({
-      method: "get",
-      path,
-      cb,
-    });
+    handler.cb(null, req, res);
   }
   /**
    * Close the server
