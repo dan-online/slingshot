@@ -6,14 +6,14 @@ A module created for [Deno](https://deno.land)
 
 ### Regular
 
-```s
-$ deno run --allow-env --allow-net myFile.ts
+```bash
+deno run --allow-env --allow-net myFile.ts
 ```
 
 ### Debug
 
-```s
-$ DEBUG=* deno run --allow-env --allow-net myFile.ts
+```bash
+DEBUG=* deno run --allow-env --allow-net myFile.ts
 ```
 
 ### myFile.ts
