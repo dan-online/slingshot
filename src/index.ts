@@ -1,4 +1,4 @@
-import { serve, debug, ServerRequest } from "../deps.ts";
+import { serve, debug, ServerRequest } from "./deps.ts";
 import { Response } from "./utils/response.ts";
 
 import { PromiseRequests } from "./handlers/promise.ts";
@@ -23,7 +23,7 @@ const log = {
 class Slingshot {
   app: any;
   log: { info: Function; route: Function; req: Function; warn: Function } = log;
-  paths: any = { get: {} };
+  paths: any = { get: {}, post: {} };
   promises: PromiseRequests;
   callbacks: CallbackRequests;
   constructor(config = { port: 8080 }) {
@@ -41,7 +41,9 @@ class Slingshot {
     }
   }
   private handleRequest(req: ServerRequest) {
-    const handler = this.paths[req.method.toLowerCase()][req.url];
+    const paths = this.paths[req.method.toLowerCase()];
+    if (!paths) return;
+    const handler = paths[req.url];
     if (!handler) {
       return req.respond({ status: 404 });
     }

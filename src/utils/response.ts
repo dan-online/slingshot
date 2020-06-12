@@ -1,4 +1,4 @@
-import { ServerRequest } from "../../deps.ts";
+import { ServerRequest } from "../deps.ts";
 
 class Response {
   req: ServerRequest;

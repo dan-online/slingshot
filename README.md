@@ -9,7 +9,7 @@ import { Slingshot } from "https://raw.githubusercontent.com/dan-online/slingsho
 
 const app = new Slingshot();
 
-app.get("/promise").then((req, res) => {
+app.get("/promise").then(({ req, res }) => {
   res.status(200).json({ date: new Date() });
 });
 
