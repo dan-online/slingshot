@@ -4,16 +4,34 @@ A module created for [Deno](https://deno.land)
 
 ## Usage
 
+### Regular
+
+```s
+$ deno run --allow-env --allow-net myFile.ts
+```
+
+### Debug
+
+```s
+$ DEBUG=* deno run --allow-env --allow-net myFile.ts
+```
+
+### myFile.ts
+
 ```typescript
-import { Slingshot } from "https://raw.githubusercontent.com/dan-online/slingshot/mod.ts";
+import {
+  Slingshot,
+  Response,
+} from "https://raw.githubusercontent.com/dan-online/slingshot/master/mod.ts";
 
 const app = new Slingshot();
 
-app.get("/promise").then(({ req, res }) => {
+app.promises.get("/promises").then((route: any) => {
+  const { res } = route;
   res.status(200).json({ date: new Date() });
 });
 
-app.get("/callback", (req, res) => {
+app.callbacks.get("/callback", (req: Request, res: Response) => {
   res.status(200).json({ date: new Date() });
 });
 ```
