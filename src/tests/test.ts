@@ -5,7 +5,9 @@ import ky from "https://unpkg.com/ky/index.js";
 const app = new Slingshot();
 
 async function fetchy(path: String, method: String) {
-  const response = ky[method]("http://localhost:8080/" + String(path));
+  const func = ky[method];
+  if (!func) throw new Error("Method not found!");
+  const response = func("http://localhost:8080/" + String(path));
   const parsed = await response.json();
   return parsed;
 }
