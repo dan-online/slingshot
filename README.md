@@ -26,12 +26,14 @@ import {
 
 const app = new Slingshot();
 
-app.promises.get("/promises").then((route: any) => {
+app.promises.get("/promise").then((route: any) => {
+  // promises can only be called once
   const { res } = route;
   res.status(200).json({ date: new Date() });
 });
 
 app.callbacks.get("/callback", (req: Request, res: Response) => {
+  // callback will be called every time
   res.status(200).json({ date: new Date() });
 });
 ```
