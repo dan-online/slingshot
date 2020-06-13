@@ -1,6 +1,7 @@
-import { assertEquals } from "./test_deps.ts";
+import { assertEquals, ky as kyD } from "./test_deps.ts";
 import { Slingshot, Response } from "../../mod.ts";
-import ky from "https://unpkg.com/ky/index.js";
+
+const ky = kyD.default;
 
 const app = new Slingshot();
 
@@ -53,22 +54,11 @@ Deno.test("post request (promise)", async () => {
   const parsed = await fetchy(path, "post");
   assertEquals(parsed.value, value);
 });
-// Deno.test("get request (promise)", async () => {
-//   const path = Math.random(),
-//     value = Math.random();
-//   app.get("/" + path).then(function (route: { res: Response; req: Request }) {
-//     route.res.status(200).json({ value });
-//   });
-//   const response = ky.get("http://localhost:8080/" + String(path));
-//   const parsed = await response.json();
-//   assertEquals(parsed.value, value);
-// });
 
 Deno.test({
   name: "close server",
   fn: function () {
     app.close();
-    console.log();
   },
   sanitizeResources: false,
   sanitizeOps: false,
