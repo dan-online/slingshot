@@ -1,15 +1,10 @@
-import { assertEquals, ky as kyD } from "./test_deps.ts";
+import { assertEquals } from "./test_deps.ts";
 import { Slingshot, Response } from "../../mod.ts";
 
-const ky = kyD.default;
-
 const app = new Slingshot();
-
 async function fetchy(path: string, method: string) {
-  const func = ky[method];
-  if (!func) throw new Error("Method not found!");
-  const response = func("http://localhost:8080/" + String(path));
-  const parsed = await response.json();
+  const res = await fetch("http://localhost:8080/" + path, { method });
+  const parsed = await res.json();
   return parsed;
 }
 
