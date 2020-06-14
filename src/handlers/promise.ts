@@ -30,10 +30,10 @@ class PromiseRequests {
   }
   post(path: string) {
     const { promise, cb } = this.createPromise();
-    if (this.app.paths["post"][path]) {
+    if (this.app.paths.post[path]) {
       this.app.log.warn("possible overwrite of path: " + path);
     }
-    this.app.paths["post"][path] = {
+    this.app.paths.post[path] = {
       path,
       cb,
     };

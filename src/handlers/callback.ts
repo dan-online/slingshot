@@ -21,11 +21,11 @@ class CallbackRequests {
     };
   }
   post(path: string, func: (req: Request, res: Response) => void) {
-    if (this.app.paths["post"][path]) {
+    if (this.app.paths.post[path]) {
       this.app.log.warn("possible overwrite of path: " + path);
     }
 
-    this.app.paths["post"][path] = {
+    this.app.paths.post[path] = {
       path,
       cb: (err: Error, req: Request, res: Response) => {
         if (err) throw err;
