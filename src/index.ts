@@ -22,7 +22,12 @@ const log = {
  */
 class Slingshot {
   app: any;
-  log: { info: Function; route: Function; req: Function; warn: Function } = log;
+  log: {
+    info: (msg: string) => void;
+    route: (msg: string) => void;
+    req: (msg: string) => void;
+    warn: (msg: string) => void;
+  } = log;
   paths: any = { get: {}, post: {} };
   promises: PromiseRequests;
   callbacks: CallbackRequests;

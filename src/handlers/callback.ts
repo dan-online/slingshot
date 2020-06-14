@@ -7,7 +7,7 @@ class CallbackRequests {
     this.app = app;
     return this;
   }
-  get(path: string, func: Function) {
+  get(path: string, func: (req: Request, res: Response) => void) {
     if (this.app.paths["get"][path]) {
       this.app.log.warn("possible overwrite of path: " + path);
     }
@@ -20,7 +20,7 @@ class CallbackRequests {
       },
     };
   }
-  post(path: string, func: Function) {
+  post(path: string, func: (req: Request, res: Response) => void) {
     if (this.app.paths["post"][path]) {
       this.app.log.warn("possible overwrite of path: " + path);
     }

@@ -5,7 +5,7 @@ const ky = kyD.default;
 
 const app = new Slingshot();
 
-async function fetchy(path: String, method: String) {
+async function fetchy(path: string, method: string) {
   const func = ky[method];
   if (!func) throw new Error("Method not found!");
   const response = func("http://localhost:8080/" + String(path));
