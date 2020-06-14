@@ -8,8 +8,8 @@ class PromiseRequests {
     return this;
   }
   createPromise() {
-    var cb;
-    var promise = new Promise((resolve, reject) => {
+    let cb;
+    const promise = new Promise((resolve, reject) => {
       cb = (err: Error, req: Request, res: Response) => {
         if (err) return reject(err);
         return resolve({ req, res });

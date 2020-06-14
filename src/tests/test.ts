@@ -14,8 +14,8 @@ async function fetchy(path: string, method: string) {
 }
 
 Deno.test("get request (promise)", async () => {
-  const path = String(Math.random()),
-    value = String(Math.random());
+  const path = String(Math.random());
+  const value = String(Math.random());
   app.promises.get("/" + path).then((route: any) => {
     const { res } = route;
     return res.status(200).json({ value });
@@ -25,8 +25,8 @@ Deno.test("get request (promise)", async () => {
 });
 
 Deno.test("get request (cb)", async () => {
-  const path = String(Math.random()),
-    value = Math.random();
+  const path = String(Math.random());
+  const value = Math.random();
   app.callbacks.get("/" + path, function (req: Request, res: Response) {
     res.status(200).json({ value });
   });
@@ -35,8 +35,8 @@ Deno.test("get request (cb)", async () => {
 });
 
 Deno.test("post request (cb)", async () => {
-  const path = String(Math.random()),
-    value = Math.random();
+  const path = String(Math.random());
+  const value = Math.random();
   app.callbacks.post("/" + path, function (req: Request, res: Response) {
     res.status(200).json({ value });
   });
@@ -45,8 +45,8 @@ Deno.test("post request (cb)", async () => {
 });
 
 Deno.test("post request (promise)", async () => {
-  const path = String(Math.random()),
-    value = String(Math.random());
+  const path = String(Math.random());
+  const value = String(Math.random());
   app.promises.post("/" + path).then((route: any) => {
     const { res } = route;
     return res.status(200).json({ value });
@@ -57,7 +57,7 @@ Deno.test("post request (promise)", async () => {
 
 Deno.test({
   name: "close server",
-  fn: function () {
+  fn: () => {
     app.close();
   },
   sanitizeResources: false,
