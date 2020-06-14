@@ -7,7 +7,7 @@ class Response {
   startTimestamp: number;
   endTimestamp: number = 0;
   speed: number = 0;
-  private finishCb: Array<(res: Response) => void> = [];
+  private finishCb: ((res: Response) => void)[] = [];
   constructor(request: ServerRequest) {
     this.req = request;
     this.startTimestamp = new Date().getTime();
