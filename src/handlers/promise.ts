@@ -19,10 +19,10 @@ class PromiseRequests {
   }
   get(path: string) {
     const { promise, cb } = this.createPromise();
-    if (this.app.paths["get"][path]) {
+    if (this.app.paths.get[path]) {
       this.app.log.warn("possible overwrite of path: " + path);
     }
-    this.app.paths["get"][path] = {
+    this.app.paths.get[path] = {
       path,
       cb,
     };

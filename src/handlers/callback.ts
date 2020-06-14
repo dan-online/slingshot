@@ -8,11 +8,11 @@ class CallbackRequests {
     return this;
   }
   get(path: string, func: (req: Request, res: Response) => void) {
-    if (this.app.paths["get"][path]) {
+    if (this.app.paths.get[path]) {
       this.app.log.warn("possible overwrite of path: " + path);
     }
 
-    this.app.paths["get"][path] = {
+    this.app.paths.get[path] = {
       path,
       cb: (err: Error, req: Request, res: Response) => {
         if (err) throw err;
