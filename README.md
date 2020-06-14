@@ -1,6 +1,13 @@
+> http server with promises, callbacks or events to suit your needs
+
+<img src="src/assets/slingshot.png" width="200px">
+
 # Slingshot (WIP)
 
-A module created for [Deno](https://deno.land)
+A module created for [Deno](https://deno.land) by [DanCodes](https://dancodes.online)
+
+![](https://www.code-inspector.com/project/9271/status/svg)
+![.github/workflows/deno.yml](https://github.com/dan-online/slingshot/workflows/.github/workflows/deno.yml/badge.svg)
 
 ## Usage
 
