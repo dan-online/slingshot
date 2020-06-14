@@ -9,12 +9,17 @@ class PromiseRequests {
   }
   createPromise() {
     let cb;
-    const promise = new Promise((resolve, reject) => {
-      cb = (err: Error, req: Request, res: Response) => {
-        if (err) return reject(err);
-        return resolve({ req, res });
-      };
-    });
+    const promise = new Promise(
+      (
+        resolve: (route: { res: Response; req: Request }) => void,
+        reject: (err: Error) => void
+      ) => {
+        cb = (err: Error, req: Request, res: Response) => {
+          if (err) return reject(err);
+          return resolve({ req, res });
+        };
+      }
+    );
     return { cb, promise };
   }
   get(path: string) {

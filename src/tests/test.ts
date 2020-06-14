@@ -22,7 +22,7 @@ Deno.test("get request (promise)", async () => {
 Deno.test("get request (cb)", async () => {
   const path = String(Math.random());
   const value = Math.random();
-  app.callbacks.get("/" + path, function (req: Request, res: Response) {
+  app.callbacks.get("/" + path, (req: Request, res: Response) => {
     res.status(200).json({ value });
   });
   const parsed = await fetchy(path, "get");
@@ -32,7 +32,7 @@ Deno.test("get request (cb)", async () => {
 Deno.test("post request (cb)", async () => {
   const path = String(Math.random());
   const value = Math.random();
-  app.callbacks.post("/" + path, function (req: Request, res: Response) {
+  app.callbacks.post("/" + path, (req: Request, res: Response) => {
     res.status(200).json({ value });
   });
   const parsed = await fetchy(path, "post");
@@ -42,8 +42,7 @@ Deno.test("post request (cb)", async () => {
 Deno.test("post request (promise)", async () => {
   const path = String(Math.random());
   const value = String(Math.random());
-  app.promises.post("/" + path).then((route: any) => {
-    const { res } = route;
+  app.promises.post("/" + path).then(({ res }) => {
     return res.status(200).json({ value });
   });
   const parsed = await fetchy(path, "post");
