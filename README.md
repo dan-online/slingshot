@@ -1,4 +1,4 @@
-> http server with promises, callbacks or events to suit your needs
+> Slingshot, the http server with promises, callbacks or events to suit your needs
 
 <img src="src/assets/slingshot.png" width="200px">
 

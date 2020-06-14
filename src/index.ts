@@ -1,9 +1,8 @@
-import { serve, debug, ServerRequest } from "./deps.ts";
+import { serve, debug, ServerRequest, Server } from "./deps.ts";
 import { Response } from "./utils/response.ts";
 
 import { PromiseRequests } from "./handlers/promise.ts";
 import { CallbackRequests } from "./handlers/callback.ts";
-
 const log = {
   info: debug("slingshot:info"),
   route: debug("slingshot:rout"),
@@ -21,7 +20,7 @@ const log = {
  * @param config - Configuration for server
  */
 class Slingshot {
-  app: any;
+  app: Server;
   log: {
     info: (msg: string) => void;
     route: (msg: string) => void;
@@ -41,7 +40,6 @@ class Slingshot {
   }
   private async listen() {
     for await (const req of this.app) {
-      if (this.app.closing) return;
       this.handleRequest(req);
     }
   }

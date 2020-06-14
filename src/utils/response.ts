@@ -1,5 +1,5 @@
 import { ServerRequest } from "../deps.ts";
-
+import Codes from "./codes.ts";
 class Response {
   req: ServerRequest;
   finished: boolean = false;
@@ -26,6 +26,9 @@ class Response {
     return this;
   }
   status(status: number) {
+    if (!Codes.find((x) => x.code == status.toString())) {
+      throw new Error("Status code " + status + " is not a valid code");
+    }
     this.statusCode = status;
     return this;
   }
