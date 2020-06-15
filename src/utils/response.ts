@@ -28,6 +28,17 @@ class SlingResponse {
     this.finishCb.push(cb);
     return this;
   }
+  type(ext: string, force?: boolean) {
+    const type = types.find((x) => x.type == ext || x.mime == ext);
+    if (!type && !force) {
+      throw new Error(
+        "type " + ext +
+          " is not valid run, with the optional parameter of force for manual",
+      );
+    }
+    this.headers.set("Content-Type", type ? type.mime : ext);
+    return type;
+  }
   async file(dir: string) {
     const decoder = new TextDecoder("utf-8");
     const location = resolve(Deno.cwd(), dir);
@@ -43,7 +54,7 @@ class SlingResponse {
     this.body = decoded;
     this.headers.set(
       "Content-Type",
-      type.content,
+      type.mime,
     );
     this.end();
   }
