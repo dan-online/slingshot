@@ -49,7 +49,7 @@ class Slingshot {
     const paths = this.paths[req.method.toLowerCase()];
     if (!paths) return;
     const handler = parsePath(paths, req.url);
-    if (!handler) {
+    if (!handler || !handler.cb) {
       return req.respond({ status: 404 });
     }
     const slingRes = new SlingResponse(req);
