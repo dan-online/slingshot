@@ -64,6 +64,30 @@ Deno.test("get html file", async () => {
 });
 
 // Type checks
+
+async function testingErrors(
+  test: (cb: (err?: Error) => void) => void,
+  path: string
+) {
+  await new Promise(async (res, rej) => {
+    let readyToRes = false;
+    test((err?: Error) => {
+      if (err) return rej(err);
+      if (readyToRes) {
+        return res();
+      } else {
+        readyToRes = true;
+      }
+    });
+    await fetchy(path, "get");
+    if (readyToRes) {
+      return res();
+    } else {
+      readyToRes = true;
+    }
+  });
+}
+
 Deno.test("double end", async () => {
   const { path } = vals();
   function test(cb: (err?: Error) => void) {
@@ -77,55 +101,23 @@ Deno.test("double end", async () => {
       }
     });
   }
-  await new Promise(async (res, rej) => {
-    let readyToRes = false;
-    test((err?: Error) => {
-      if (err) return rej(err);
-      if (readyToRes) {
-        return res();
-      } else {
-        readyToRes = true;
-      }
-    });
-    await fetchy(path, "get");
-    if (readyToRes) {
-      return res();
-    } else {
-      readyToRes = true;
-    }
-  });
+  await testingErrors(test, path);
 });
 
 Deno.test("wrong status code", async () => {
-  const { path, value } = vals();
+  const { path } = vals();
   function test(cb: (err?: Error) => void) {
     app.callbacks.get("/" + path, (req: SlingRequest, res: SlingResponse) => {
       try {
-        res.code(1).json({ value });
+        res.code(1).json({ hello: "world" });
         cb(new Error("Status code should have thrown"));
       } catch (err) {
-        res.json({ value });
+        res.json({ hello: "world" });
         cb();
       }
     });
   }
-  await new Promise(async (res, rej) => {
-    let readyToRes = false;
-    test((err?: Error) => {
-      if (err) return rej(err);
-      if (readyToRes) {
-        return res();
-      } else {
-        readyToRes = true;
-      }
-    });
-    await fetchy(path, "get");
-    if (readyToRes) {
-      return res();
-    } else {
-      readyToRes = true;
-    }
-  });
+  await testingErrors(test, path);
 });
 
 Deno.test("post (100ms delay)", async () => {
@@ -136,7 +128,7 @@ Deno.test("post (100ms delay)", async () => {
   const start = new Date().getTime();
   const parsed = await fetchy(path, "post");
   const speed = Math.round((new Date().getTime() - start) / 100) * 100;
-  if (speed == 100) {
+  if (speed === 100) {
     assertEquals(parsed.value, value);
   } else {
     throw new Error("Headers were sent too early!");
