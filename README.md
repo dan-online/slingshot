@@ -8,6 +8,9 @@ A module created for [Deno](https://deno.land) by [DanCodes](https://dancodes.on
 
 ![](https://www.code-inspector.com/project/9271/status/svg)
 ![.github/workflows/deno.yml](https://github.com/dan-online/slingshot/workflows/.github/workflows/deno.yml/badge.svg)
+[![DanCodes Discord](https://img.shields.io/discord/478586684666150934?color=%237289DA&label=discord%20support&logo=discord&logoColor=%23fff)](https://discord.gg/fdpcZAA)
+![GitHub repo size](https://img.shields.io/github/repo-size/dan-online/slingshot)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/dan-online/slingshot)
 
 ## Usage
 
