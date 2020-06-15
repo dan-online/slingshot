@@ -3,9 +3,9 @@ import { Slingshot, SlingResponse, SlingRequest } from "../../mod.ts";
 
 const app = new Slingshot();
 
-async function fetchy(path: string, method: string) {
+async function fetchy(path: string, method: string, json: boolean = true) {
   const res = await fetch("http://localhost:8080/" + path, { method });
-  const parsed = await res.json();
+  const parsed = json ? await res.json() : await res.text();
   return parsed;
 }
 function vals() {
@@ -49,6 +49,18 @@ Deno.test("post request (promise)", async () => {
   });
   const parsed = await fetchy(path, "post");
   assertEquals(parsed.value, value);
+});
+
+Deno.test("get html file", async () => {
+  const { path } = vals();
+  app.callbacks.get("/" + path, (req: SlingRequest, res: SlingResponse) => {
+    return res.file("./src/tests/index.html");
+  });
+  const parsed = await fetchy(path, "get", false);
+  const decoder = new TextDecoder("utf-8");
+  const data = Deno.readFileSync("./src/tests/index.html");
+  const file = decoder.decode(data);
+  assertEquals(parsed, file);
 });
 
 // Type checks

@@ -1,0 +1,15 @@
+export default [
+  { type: "md", content: "text/markdown" },
+  { type: "html", content: "text/html" },
+  { type: "htm", content: "text/html" },
+  { type: "json", content: "application/json" },
+  { type: "map", content: "application/json" },
+  { type: "txt", content: "text/plain" },
+  { type: "ts", content: "text/typescript" },
+  { type: "tsx", content: "text/tsx" },
+  { type: "js", content: "application/javascript" },
+  { type: "jsx", content: "text/jsx" },
+  { type: "gz", content: "application/gzip" },
+  { type: "css", content: "text/css" },
+  { type: "wasm", content: "application/wasm" },
+];
