@@ -10,7 +10,7 @@ class Threader {
     return this;
   }
   init(amount: number) {
-    for (var i = 0; i < amount; i++) {
+    for (let i = 0; i < amount; i++) {
       this.thread(i);
     }
     this.loadBalance();
@@ -25,9 +25,7 @@ class Threader {
       shard: shard,
       reqs: [],
     };
-    worker.postMessage(
-      { options },
-    );
+    worker.postMessage({ options });
     this.load.push(options);
   }
   async loadBalance() {
@@ -35,30 +33,27 @@ class Threader {
       req.id = Math.random();
       let server: any;
       this.load.forEach((x: any) => {
-        if (!server) return server = x;
+        if (!server) return (server = x);
         if (x.reqs.length < server.reqs.length) {
-          return server = x;
+          return (server = x);
         }
       });
       const ind = this.load.indexOf(server);
       this.load[ind].reqs.push(req);
       let load = 0;
-      this.load.forEach((x: any) => load += x.reqs.length);
+      this.load.forEach((x: any) => (load += x.reqs.length));
       // console.table(this.load);
       fetch("http://localhost:" + server.port + req.url, {
         method: req.method,
         headers: req.headers,
       }).then((resp) => {
-        req.respond(
-          { status: 200 || resp.status, headers: resp.headers },
-        );
+        req.respond({ status: 200 || resp.status, headers: resp.headers });
         req.done.then(() => {
-          this.load[ind].reqs = this.load[ind].reqs.filter((x: any) =>
-            x.id != req.id
+          this.load[ind].reqs = this.load[ind].reqs.filter(
+            (x: any) => x.id !== req.id
           );
         });
       });
-      console.log(this.load.map((x: any) => x.reqs.length));
     }
   }
 }
