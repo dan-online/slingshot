@@ -19,10 +19,14 @@ class SlingResponse {
   private clean() {
     this.endTimestamp = new Date().getTime();
     this.speed = this.endTimestamp - this.startTimestamp;
+    this.finished = true;
     this.finishCb.forEach((cb: (res: SlingResponse) => void) => {
       cb(this);
     });
     return this;
+  }
+  private checkSent() {
+    if (this.finished) throw new Error("Headers have already been sent!");
   }
   onfinish(cb: (res: SlingResponse) => void) {
     this.finishCb.push(cb);
@@ -59,6 +63,7 @@ class SlingResponse {
     this.end();
   }
   code(status: number) {
+    this.checkSent();
     if (!Codes.find((x) => x.code == status.toString())) {
       throw new Error("Status code " + status + " is not a valid code");
     }
@@ -70,6 +75,7 @@ class SlingResponse {
     return this.end();
   }
   end() {
+    this.checkSent();
     this.req.respond(
       { body: this.body, status: this.statusCode, headers: this.headers },
     );

@@ -50,6 +50,18 @@ class Slingshot {
     if (!paths) return;
     const handler = parsePath(paths, req.url);
     if (!handler || !handler.cb) {
+      req.done.then(() => {
+        this.log.req(
+          req.method +
+            " " +
+            req.url +
+            " " +
+            404 +
+            " " +
+            0 +
+            "ms",
+        );
+      });
       return req.respond({ status: 404 });
     }
     const slingRes = new SlingResponse(req);
@@ -63,7 +75,7 @@ class Slingshot {
           finishRes.statusCode +
           " " +
           finishRes.speed +
-          "ms"
+          "ms",
       );
     });
     handler.cb(null, slingReq, slingRes);
