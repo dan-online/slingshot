@@ -29,14 +29,11 @@ DEBUG=* deno run --allow-env --allow-net myFile.ts
 ### myFile.ts
 
 ```typescript
-import {
-  Slingshot,
-  SlingResponse,
-} from "https://raw.githubusercontent.com/dan-online/slingshot/master/mod.ts";
+import { Slingshot, SlingResponse, SlingRequest } from "./mod.ts";
 
 const app = new Slingshot();
 
-app.promises.post("/" + path).then(({ res }) => {
+app.promises.post("/").then(({ res }) => {
   // promises can only be called once
   return res.code(200).json({ date: new Date() });
 });
