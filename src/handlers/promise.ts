@@ -10,7 +10,7 @@ class PromiseRequests {
     return this;
   }
   createPromise() {
-    let cb: (err: Error, req: SlingRequest, res: SlingResponse) => void;
+    let cb: any;
     const promise = new Promise(
       (
         resolve: (route: { res: SlingResponse; req: SlingRequest }) => void,
