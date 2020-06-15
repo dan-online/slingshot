@@ -47,7 +47,7 @@ export default [
   { code: "428", msg: "Precondition Required" },
   { code: "429", msg: "Too Many Requests" },
   { code: "431", msg: "Request Header Fields Too Large" },
-  { code: "444", msg: "Connection Closed Without SlingResponse" },
+  { code: "444", msg: "Connection Closed Without Response" },
   { code: "451", msg: "Unavailable For Legal Reasons" },
   { code: "499", msg: "Client Closed Request" },
   { code: "500", msg: "Internal Server Error" },

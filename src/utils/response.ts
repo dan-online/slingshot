@@ -38,7 +38,7 @@ class SlingResponse {
       throw new Error(
         "type " +
           ext +
-          " is not valid run, with the optional parameter of force for manual",
+          " is not valid run, with the optional parameter of force for manual"
       );
     }
     this.headers.set("Content-Type", type ? type.mime : ext);
@@ -70,6 +70,10 @@ class SlingResponse {
   }
   json(info: any) {
     this.body = JSON.stringify(info);
+    return this.end();
+  }
+  send(text: string) {
+    this.body = text;
     return this.end();
   }
   end() {
