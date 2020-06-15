@@ -16,8 +16,7 @@ function vals() {
 
 Deno.test("get request (promise)", async () => {
   const { path, value } = vals();
-  app.promises.get("/" + path).then((route: any) => {
-    const { res } = route;
+  app.promises.get("/" + path).then(({ res }) => {
     return res.code(200).json({ value });
   });
   const parsed = await fetchy(path, "get");
