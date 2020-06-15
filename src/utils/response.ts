@@ -33,11 +33,12 @@ class SlingResponse {
     return this;
   }
   type(ext: string, force?: boolean) {
-    const type = types.find((x) => x.type == ext || x.mime == ext);
+    const type = types.find((x) => x.type === ext || x.mime === ext);
     if (!type && !force) {
       throw new Error(
-        "type " + ext +
-          " is not valid run, with the optional parameter of force for manual",
+        "type " +
+          ext +
+          " is not valid run, with the optional parameter of force for manual"
       );
     }
     this.headers.set("Content-Type", type ? type.mime : ext);
@@ -56,15 +57,12 @@ class SlingResponse {
       throw new Error("File type was not found!");
     }
     this.body = decoded;
-    this.headers.set(
-      "Content-Type",
-      type.mime,
-    );
+    this.headers.set("Content-Type", type.mime);
     this.end();
   }
   code(status: number) {
     this.checkSent();
-    if (!Codes.find((x) => x.code == status.toString())) {
+    if (!Codes.find((x) => x.code === status.toString())) {
       throw new Error("Status code " + status + " is not a valid code");
     }
     this.statusCode = status;
@@ -76,9 +74,11 @@ class SlingResponse {
   }
   end() {
     this.checkSent();
-    this.req.respond(
-      { body: this.body, status: this.statusCode, headers: this.headers },
-    );
+    this.req.respond({
+      body: this.body,
+      status: this.statusCode,
+      headers: this.headers,
+    });
     return this.clean();
   }
 }
