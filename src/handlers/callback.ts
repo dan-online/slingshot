@@ -1,4 +1,4 @@
-import { Slingshot } from "../index.ts";
+import { Slingshot } from "../slingshot.ts";
 import { SlingResponse } from "../utils/response.ts";
 import { SlingRequest } from "../utils/request.ts";
 import { Path } from "../utils/path.ts";

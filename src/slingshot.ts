@@ -5,6 +5,7 @@ import { parsePath } from "./utils/parse.ts";
 import { PromiseRequests } from "./handlers/promise.ts";
 import { CallbackRequests } from "./handlers/callback.ts";
 import { SlingRequest } from "./utils/request.ts";
+
 const log = {
   info: debug("slingshot:info"),
   route: debug("slingshot:rout"),
@@ -32,11 +33,15 @@ class Slingshot {
   paths: any = { get: {}, post: {} };
   promises: PromiseRequests;
   callbacks: CallbackRequests;
-  constructor(config = { port: 8080 }) {
+  constructor(config = { port: 8080, shard: false }) {
     this.app = serve(config);
     this.promises = new PromiseRequests(this);
     this.callbacks = new CallbackRequests(this);
-    this.log.info("server started");
+    this.log.info(
+      (config.shard !== false ? "thread" : "server") +
+        " started on port " +
+        config.port,
+    );
     this.listen();
     return this;
   }
