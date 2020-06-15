@@ -6,13 +6,6 @@ import { PromiseRequests } from "./handlers/promise.ts";
 import { CallbackRequests } from "./handlers/callback.ts";
 import { SlingRequest } from "./utils/request.ts";
 
-const log = {
-  info: debug("slingshot:info"),
-  route: debug("slingshot:rout"),
-  req: debug("slingshot:reqs"),
-  warn: debug("slingshot:warn"),
-};
-
 /**
  * The Slingshot core
  * @constructor
@@ -29,14 +22,17 @@ class Slingshot {
     route: (msg: string) => void;
     req: (msg: string) => void;
     warn: (msg: string) => void;
-  } = log;
+  };
   paths: any = { get: {}, post: {} };
   promises: PromiseRequests;
   callbacks: CallbackRequests;
+  config: { port: number; shard: boolean | number };
   constructor(config = { port: 8080, shard: false }) {
     this.app = serve(config);
     this.promises = new PromiseRequests(this);
     this.callbacks = new CallbackRequests(this);
+    this.config = config;
+    this.log = this.initLog();
     this.log.info(
       (config.shard !== false ? "thread" : "server") +
         " started on port " +
@@ -49,6 +45,26 @@ class Slingshot {
     for await (const req of this.app) {
       this.handleRequest(req);
     }
+  }
+  private initLog() {
+    return {
+      info: debug(
+        "slingshot:info" +
+          (this.config.shard !== false ? ":" + this.config.shard : ""),
+      ),
+      route: debug(
+        "slingshot:rout" +
+          (this.config.shard !== false ? ":" + this.config.shard : ""),
+      ),
+      req: debug(
+        "slingshot:reqs" +
+          (this.config.shard !== false ? ":" + this.config.shard : ""),
+      ),
+      warn: debug(
+        "slingshot:warn" +
+          (this.config.shard !== false ? ":" + this.config.shard : ""),
+      ),
+    };
   }
   private handleRequest(req: ServerRequest) {
     const paths = this.paths[req.method.toLowerCase()];

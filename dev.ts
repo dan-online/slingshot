@@ -1,4 +1,4 @@
 import { Threader } from "./src/threader.ts";
 
 const Manager = new Threader();
-Manager.init(3);
+Manager.init(4);

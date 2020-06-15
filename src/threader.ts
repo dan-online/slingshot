@@ -13,6 +13,7 @@ class Threader {
     for (var i = 0; i < amount; i++) {
       this.thread(i);
     }
+    this.loadBalance();
   }
   thread(shard: number) {
     const worker = new Worker(new URL("thread.ts", import.meta.url).href, {
@@ -28,6 +29,37 @@ class Threader {
       { options },
     );
     this.load.push(options);
+  }
+  async loadBalance() {
+    for await (const req of this.balancer) {
+      req.id = Math.random();
+      let server: any;
+      this.load.forEach((x: any) => {
+        if (!server) return server = x;
+        if (x.reqs.length < server.reqs.length) {
+          return server = x;
+        }
+      });
+      const ind = this.load.indexOf(server);
+      this.load[ind].reqs.push(req);
+      let load = 0;
+      this.load.forEach((x: any) => load += x.reqs.length);
+      // console.table(this.load);
+      fetch("http://localhost:" + server.port + req.url, {
+        method: req.method,
+        headers: req.headers,
+      }).then((resp) => {
+        req.respond(
+          { status: 200 || resp.status, headers: resp.headers },
+        );
+        req.done.then(() => {
+          this.load[ind].reqs = this.load[ind].reqs.filter((x: any) =>
+            x.id != req.id
+          );
+        });
+      });
+      console.log(this.load.map((x: any) => x.reqs.length));
+    }
   }
 }
 
