@@ -52,7 +52,7 @@ class SlingResponse {
     const data = await Deno.readFile(location);
     const decoded = decoder.decode(data);
     const ext = location.split(".")[location.split(".").length - 1];
-    const type = types.find((x) => x.type == ext);
+    const type = types.find((x) => x.type === ext);
     if (!type) {
       throw new Error("File type was not found!");
     }
