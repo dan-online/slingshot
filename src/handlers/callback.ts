@@ -18,6 +18,7 @@ class CallbackRequests {
       return func(req, res);
     };
     this.app.paths.get[path] = new Path(path, cb);
+    this.app.log.route("added " + path + " on method: get");
   }
   post(path: string, func: (req: SlingRequest, res: SlingResponse) => void) {
     if (this.app.paths.post[path]) {
@@ -29,6 +30,7 @@ class CallbackRequests {
       return func(req, res);
     };
     this.app.paths.post[path] = new Path(path, cb);
+    this.app.log.route("added " + path + " on method: post");
   }
 }
 

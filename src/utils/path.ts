@@ -6,7 +6,7 @@ class Path {
   path: string;
   constructor(
     path: string,
-    cb: (err: Error, req: SlingRequest, res: SlingResponse) => void,
+    cb: (err: Error, req: SlingRequest, res: SlingResponse) => void
   ) {
     this.cb = cb;
     this.path = path;

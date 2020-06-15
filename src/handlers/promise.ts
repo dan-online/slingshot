@@ -30,6 +30,7 @@ class PromiseRequests {
       this.app.log.warn("possible overwrite of path: " + path);
     }
     this.app.paths.get[path] = new Path(path, cb);
+    this.app.log.route("added " + path + " on method: get");
     return promise;
   }
   post(path: string) {
@@ -38,6 +39,7 @@ class PromiseRequests {
       this.app.log.warn("possible overwrite of path: " + path);
     }
     this.app.paths.post[path] = new Path(path, cb);
+    this.app.log.route("added " + path + " on method: post");
     return promise;
   }
 }
