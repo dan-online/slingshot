@@ -1,8 +1,10 @@
 import { serve, debug, ServerRequest, Server } from "./deps.ts";
-import { Response } from "./utils/response.ts";
+import { SlingResponse } from "./utils/response.ts";
 
+import { parsePath } from "./utils/parse.ts";
 import { PromiseRequests } from "./handlers/promise.ts";
 import { CallbackRequests } from "./handlers/callback.ts";
+import { SlingRequest } from "./utils/request.ts";
 const log = {
   info: debug("slingshot:info"),
   route: debug("slingshot:rout"),
@@ -46,12 +48,13 @@ class Slingshot {
   private handleRequest(req: ServerRequest) {
     const paths = this.paths[req.method.toLowerCase()];
     if (!paths) return;
-    const handler = paths[req.url];
+    const handler = parsePath(paths, req.url);
     if (!handler) {
       return req.respond({ status: 404 });
     }
-    const res = new Response(req);
-    res.onfinish((finishRes: Response) => {
+    const slingRes = new SlingResponse(req);
+    const slingReq = new SlingRequest(req);
+    slingRes.onfinish((finishRes: SlingResponse) => {
       this.log.req(
         req.method +
           " " +
@@ -63,7 +66,7 @@ class Slingshot {
           "ms"
       );
     });
-    handler.cb(null, req, res);
+    handler.cb(null, slingReq, slingRes);
   }
   /**
    * Close the server

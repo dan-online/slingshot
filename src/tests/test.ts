@@ -1,5 +1,5 @@
 import { assertEquals } from "./test_deps.ts";
-import { Slingshot, Response } from "../../mod.ts";
+import { Slingshot, SlingResponse, SlingRequest } from "../../mod.ts";
 
 const app = new Slingshot();
 
@@ -18,7 +18,7 @@ Deno.test("get request (promise)", async () => {
   const { path, value } = vals();
   app.promises.get("/" + path).then((route: any) => {
     const { res } = route;
-    return res.status(200).json({ value });
+    return res.code(200).json({ value });
   });
   const parsed = await fetchy(path, "get");
   assertEquals(parsed.value, value);
@@ -26,8 +26,8 @@ Deno.test("get request (promise)", async () => {
 
 Deno.test("get request (cb)", async () => {
   const { path, value } = vals();
-  app.callbacks.get("/" + path, (req: Request, res: Response) => {
-    res.status(200).json({ value });
+  app.callbacks.get("/" + path, (req: SlingRequest, res: SlingResponse) => {
+    res.code(200).json({ value });
   });
   const parsed = await fetchy(path, "get");
   assertEquals(parsed.value, value);
@@ -35,8 +35,8 @@ Deno.test("get request (cb)", async () => {
 
 Deno.test("post request (cb)", async () => {
   const { path, value } = vals();
-  app.callbacks.post("/" + path, (req: Request, res: Response) => {
-    res.status(200).json({ value });
+  app.callbacks.post("/" + path, (req: SlingRequest, res: SlingResponse) => {
+    res.code(200).json({ value });
   });
   const parsed = await fetchy(path, "post");
   assertEquals(parsed.value, value);
@@ -45,7 +45,7 @@ Deno.test("post request (cb)", async () => {
 Deno.test("post request (promise)", async () => {
   const { path, value } = vals();
   app.promises.post("/" + path).then(({ res }) => {
-    return res.status(200).json({ value });
+    return res.code(200).json({ value });
   });
   const parsed = await fetchy(path, "post");
   assertEquals(parsed.value, value);
@@ -56,9 +56,9 @@ Deno.test("post request (promise)", async () => {
 Deno.test("wrong status code", async () => {
   const { path, value } = vals();
   function test(cb: (err?: Error) => void) {
-    app.callbacks.get("/" + path, (req: Request, res: Response) => {
+    app.callbacks.get("/" + path, (req: SlingRequest, res: SlingResponse) => {
       try {
-        res.status(1).json({ value });
+        res.code(1).json({ value });
         cb(new Error("Status code should have thrown"));
       } catch (err) {
         res.json({ value });
@@ -70,7 +70,6 @@ Deno.test("wrong status code", async () => {
     let readyToRes = false;
     test((err?: Error) => {
       if (err) return rej(err);
-      // console.log(readyToRes);
       if (readyToRes) {
         return res();
       } else {

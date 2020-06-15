@@ -1,5 +1,7 @@
 import { Slingshot } from "../index.ts";
-import { Response } from "../utils/response.ts";
+import { SlingResponse } from "../utils/response.ts";
+import { SlingRequest } from "../utils/request.ts";
+import { Path } from "../utils/path.ts";
 
 class PromiseRequests {
   app: Slingshot;
@@ -8,13 +10,13 @@ class PromiseRequests {
     return this;
   }
   createPromise() {
-    let cb;
+    let cb: (err: Error, req: SlingRequest, res: SlingResponse) => void;
     const promise = new Promise(
       (
-        resolve: (route: { res: Response; req: Request }) => void,
+        resolve: (route: { res: SlingResponse; req: SlingRequest }) => void,
         reject: (err: Error) => void
       ) => {
-        cb = (err: Error, req: Request, res: Response) => {
+        cb = (err: Error, req: SlingRequest, res: SlingResponse) => {
           if (err) return reject(err);
           return resolve({ req, res });
         };
@@ -27,10 +29,7 @@ class PromiseRequests {
     if (this.app.paths.get[path]) {
       this.app.log.warn("possible overwrite of path: " + path);
     }
-    this.app.paths.get[path] = {
-      path,
-      cb,
-    };
+    this.app.paths.get[path] = new Path(path, cb);
     return promise;
   }
   post(path: string) {
@@ -38,10 +37,7 @@ class PromiseRequests {
     if (this.app.paths.post[path]) {
       this.app.log.warn("possible overwrite of path: " + path);
     }
-    this.app.paths.post[path] = {
-      path,
-      cb,
-    };
+    this.app.paths.post[path] = new Path(path, cb);
     return promise;
   }
 }
