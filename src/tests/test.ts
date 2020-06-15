@@ -66,7 +66,7 @@ Deno.test("get html file", async () => {
 
 async function testingErrors(
   test: (cb: (err?: Error) => void) => void,
-  path: string
+  path: string,
 ) {
   await new Promise(async (res, rej) => {
     let readyToRes = false;

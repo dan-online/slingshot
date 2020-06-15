@@ -50,7 +50,7 @@ class Threader {
         req.respond({ status: 200 || resp.status, headers: resp.headers });
         req.done.then(() => {
           this.load[ind].reqs = this.load[ind].reqs.filter(
-            (x: any) => x.id !== req.id
+            (x: any) => x.id !== req.id,
           );
         });
       });

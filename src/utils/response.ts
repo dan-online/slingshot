@@ -38,7 +38,7 @@ class SlingResponse {
       throw new Error(
         "type " +
           ext +
-          " is not valid run, with the optional parameter of force for manual"
+          " is not valid run, with the optional parameter of force for manual",
       );
     }
     this.headers.set("Content-Type", type ? type.mime : ext);

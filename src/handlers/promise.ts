@@ -14,13 +14,13 @@ class PromiseRequests {
     const promise = new Promise(
       (
         resolve: (route: { res: SlingResponse; req: SlingRequest }) => void,
-        reject: (err: Error) => void,
+        reject: (err: Error) => void
       ) => {
         cb = (err: Error, req: SlingRequest, res: SlingResponse) => {
           if (err) return reject(err);
           return resolve({ req, res });
         };
-      },
+      }
     );
     return { cb, promise };
   }

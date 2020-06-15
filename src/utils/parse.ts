@@ -5,13 +5,13 @@ function parsePath(paths: object, url: string) {
   }));
   const find:
     | {
-        key: string;
-        val: any;
-      }
+      key: string;
+      val: any;
+    }
     | undefined = arrayPaths.find(
-    (route) => route.val.path === url.split("?")[0]
-    // new RegExp(route.val.path).test(url)
-  );
+      (route) => route.val.path === url.split("?")[0],
+      // new RegExp(route.val.path).test(url)
+    );
   return find ? find.val : { cb: false };
 }
 
