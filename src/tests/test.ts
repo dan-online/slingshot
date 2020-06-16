@@ -50,7 +50,16 @@ Deno.test("post request (promise)", async () => {
   assertEquals(parsed.value, value);
 });
 
-Deno.test("get html file", async () => {
+Deno.test("get request query", async () => {
+  const { path, value } = vals();
+  app.callbacks.get("/" + path, (req: SlingRequest, res: SlingResponse) => {
+    return res.json({ value: req.query.val });
+  });
+  const parsed = await fetchy(path + "?val=" + value, "get");
+  assertEquals(parsed.value, value);
+});
+
+Deno.test("get request html file", async () => {
   const { path } = vals();
   app.callbacks.get("/" + path, (req: SlingRequest, res: SlingResponse) => {
     return res.file("./src/tests/index.html");
@@ -66,7 +75,7 @@ Deno.test("get html file", async () => {
 
 async function testingErrors(
   test: (cb: (err?: Error) => void) => void,
-  path: string,
+  path: string
 ) {
   await new Promise(async (res, rej) => {
     let readyToRes = false;

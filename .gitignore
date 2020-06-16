@@ -8,7 +8,6 @@
 # Deno Lint
 node_modules/
 yarn.lock
-package.json
 .vscode
 
 testing.ts

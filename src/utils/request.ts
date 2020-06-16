@@ -10,6 +10,9 @@ class SlingRequest {
     return this.req.method;
   }
   get path() {
+    return this.req.url.split("?")[0];
+  }
+  get url() {
     return this.req.url;
   }
   get protocol() {
@@ -29,6 +32,15 @@ class SlingRequest {
   }
   get body() {
     return this.req.body;
+  }
+  get query() {
+    const splut = this.url.split("?");
+    if (splut.length < 2) return {};
+    const query: { [key: string]: any } = {};
+    splut[1].split("&").forEach((q) => {
+      query[q.split("=")[0]] = q.split("=")[1] || true;
+    });
+    return query;
   }
   done(cb: () => void) {
     this.req.done.then(cb);
